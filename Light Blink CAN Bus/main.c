@@ -63,6 +63,8 @@ static void MX_CAN_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+
+
 /* USER CODE END 0 */
 
 /**
@@ -96,35 +98,39 @@ int main(void)
   MX_USART2_UART_Init();
   MX_CAN_Init();
   /* USER CODE BEGIN 2 */
-  	canfil.FilterBank = 0;
-    canfil.FilterMode = CAN_FILTERMODE_IDMASK;
-    canfil.FilterFIFOAssignment = CAN_RX_FIFO0;
-    canfil.FilterIdHigh = 0;
-    canfil.FilterIdLow = 0;
-    canfil.FilterMaskIdHigh = 0;
-    canfil.FilterMaskIdLow = 0;
-    canfil.FilterScale = CAN_FILTERSCALE_32BIT;
-    canfil.FilterActivation = ENABLE;
-    canfil.SlaveStartFilterBank = 14;
+  canfil.FilterBank = 0;
+  canfil.FilterMode = CAN_FILTERMODE_IDMASK;
+  canfil.FilterFIFOAssignment = CAN_RX_FIFO0;
+  canfil.FilterIdHigh = 0;
+  canfil.FilterIdLow = 0;
+  canfil.FilterMaskIdHigh = 0;
+  canfil.FilterMaskIdLow = 0;
+  canfil.FilterScale = CAN_FILTERSCALE_32BIT;
+  canfil.FilterActivation = ENABLE;
+  canfil.SlaveStartFilterBank = 14;
 
-    txHeader.DLC = 8;
-    txHeader.IDE = CAN_ID_STD;
-    txHeader.RTR = CAN_RTR_DATA;
-    txHeader.StdId = 0x030;
-    txHeader.ExtId = 0x02;
-    txHeader.TransmitGlobalTime = DISABLE;
+  txHeader.DLC = 8;
+  txHeader.IDE = CAN_ID_STD;
+  txHeader.RTR = CAN_RTR_DATA;
+  txHeader.StdId = 0x030;
+  txHeader.ExtId = 0x02;
+  txHeader.TransmitGlobalTime = DISABLE;
 
-    HAL_CAN_ConfigFilter(&hcan,&canfil);
-    HAL_CAN_Start(&hcan);
-    HAL_CAN_ActivateNotification(&hcan,CAN_IT_RX_FIFO0_MSG_PENDING);
-
+  HAL_CAN_ConfigFilter(&hcan,&canfil);
+  HAL_CAN_Start(&hcan);
+  HAL_CAN_ActivateNotification(&hcan,CAN_IT_RX_FIFO0_MSG_PENDING);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  uint8_t csend[] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
+	  HAL_CAN_AddTxMessage(&hcan,&txHeader,csend,&canMailbox);
+	  HAL_Delay(1000);
 
+	  HAL_GPIO_TogglePin (GPIOB, GPIO_PIN_3);
+	  HAL_Delay (100);   /* Insert delay 100 ms */
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -263,19 +269,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = GPIO_PIN_3;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
-	  {
-	  	HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rxHeader, canRX);
-	  	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_3);
 
-
-	  }
 /* USER CODE END 4 */
 
 /**
