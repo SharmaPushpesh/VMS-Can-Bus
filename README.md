@@ -324,7 +324,7 @@ sending and receiving CAN messages.
 * Braeden Hamson: VMS electrical lead. CAN capstone technical lead. Understands the
 vehicle systems and the interface between the CAN system and the rest of the systems of
 the car.
-* Jade Nguyen: working with Alice on setting up a CAN bus using the STM32
+* Jade Nguyen: Working with Alice on setting up a CAN bus using the STM32
 microcontroller, providing simple C code to read and write to the CAN bus and send it to
 the transceiver.
 * Pushpesh Sharma: Working on PCB schematics and using Altium to set up schematics,
