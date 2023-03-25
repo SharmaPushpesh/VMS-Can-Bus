@@ -1,5 +1,5 @@
 # VMS-Can-Bus
-
+`#ffffff`
 Proposal Outline and Discussion
 1. Executive Summary
 Viking Motorsports is an EV racing team at PSU. They are a student organization and compete in
